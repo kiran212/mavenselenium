@@ -649,8 +649,8 @@ public class HTMLReportGenerator {
 	    	content.append("</tbody><tbody style='display:table-row-group'>"
 	    			+ "				<tr>\r\n" + 
 //	    			"					<td></td>"+			
-	    			"					<td class='keywordlnk' colspan='5' name = 'keywordlink' onclick='toggleMenu(\""+keyword+iteration+"\")' > -- Keyword: "+keyword+" </td>\r\n" +
-//	    		"					<td class='keywordlnk'></td>"+
+	    			"					<td class='keywordlnk' name = 'keywordlink' colspan='2' onclick='toggleMenu(\""+keyword+iteration+"\")' > -- Keyword: "+keyword+" </td>\r\n" +
+	    			"					<td class='keywordlnk'></td>"+
 	    			"				</tr>");
 	    	saveTestLogHTML(content);
 	    	System.out.println();
@@ -1333,39 +1333,51 @@ public class HTMLReportGenerator {
 	    			"}\r\n" + 
 	    			"\r\n" + 
 	    			"\r\n" + 
+	    			"function imgToggle() {\r\n" + 
+	    			"	var ob = document.getElementsByName('screenshot');\r\n" + 
+	    			"	var ob2 = document.getElementsByTagName('figure');\r\n" + 
+	    			"\r\n" + 
+	    			"	for (var i = 0; i < ob.length; i++) {\r\n" + 
+	    			"		if (ob === null) {\r\n" + 
+	    			"			break;\r\n" + 
+	    			"		}\r\n" + 
+	    			"		if (ob[i].style.display === 'none') {\r\n" + 
+	    			"			try {\r\n" + 
+	    			"				ob[i].style.display = 'table-row';\r\n" + 
+	    			"				ob2[i].style.display = 'table-row';\r\n" + 
+	    			"				\r\n" + 
+	    			"			} catch (ex) {\r\n" + 
+	    			"				ob[i].style.display = 'block';\r\n" + 
+	    			"				ob2[i].style.display = 'block';\r\n" + 
+	    			"			}\r\n" + 
+	    			"		} else {\r\n" + 
+	    			"			ob[i].style.display = 'none';\r\n" + 
+	    			"			ob2[i].style.display = 'none';\r\n" + 
+	    			"		}\r\n" + 
+	    			"	}\r\n" + 
+	    			"}\r\n" + 
+	    			""+
 	    			"function keywordColor() {\r\n" + 
 	    			"var mainlist = document.getElementsByTagName('tbody');\r\n" + 
 	    			"	//console.log(mainlist.length);\r\n" + 
 	    			"	for (var i = 0; i < mainlist.length; i++) {\r\n" + 
 	    			"		var sublist = mainlist[i].getElementsByClassName('td_fstatus');\r\n" + 
 	    			"		var keywordEle = mainlist[i].getElementsByClassName('keywordlnk')[0];\r\n" + 
-	    			"		\r\n" + 
 	    			"		if (sublist.length != 0) {\r\n" + 
-	    			"			var keywordName = keywordEle.innerText;\r\n" + 
-	    			"			var keywordLength = keywordName.length;\r\n" + 
-	    			"			for(var j=keywordLength; j<83;j++){\r\n" + 
-	    			"				keywordName = keywordName+'\\xa0'\r\n" + 
-	    			"			}\r\n" + 
-	    			"			keywordName = keywordName+'| FAILED |';\r\n" + 
-	    			"			keywordEle.innerText = keywordName;\r\n" + 
+	    			"			mainlist[i].getElementsByClassName('keywordlnk')[1].innerText='| FAILED |';\r\n" + 
+	    			"			mainlist[i].getElementsByClassName('keywordlnk')[1].setAttribute('class', 'keyword_fail');\r\n" + 
 	    			"			keywordEle.setAttribute('class', 'keyword_fail'); // kiran\r\n" + 
 	    			"			\r\n" + 
 	    			"		} else {\r\n" + 
 	    			"			var sublist = mainlist[i].getElementsByClassName('td_pstatus');\r\n" + 
 	    			"			if (sublist.length != 0) {\r\n" + 
-	    			"				var keywordName = keywordEle.innerText;\r\n" + 
-	    			"				//mainlist[i].getElementsByClassName('keywordlnk')[1].innerText='| PASSED |';\r\n" + 
-	    			"				var keywordLength = keywordName.length;\r\n" + 
-	    			"				for(var j=keywordLength; j<83;j++){\r\n" + 
-	    			"					keywordName = keywordName+'\\xa0'\r\n" + 
-	    			"					}\r\n" + 
-	    			"				keywordName = keywordName+'| PASSED |';\r\n" + 
-	    			"				keywordEle.innerText = keywordName;\r\n" + 
+	    			"				mainlist[i].getElementsByClassName('keywordlnk')[1].innerText='| PASSED |';\r\n" + 
+	    			"				mainlist[i].getElementsByClassName('keywordlnk')[1].setAttribute('class', 'keyword_pass');\r\n" + 
 	    			"				keywordEle.setAttribute('class', 'keyword_pass');\r\n" + 
 	    			"			}\r\n" + 
 	    			"		}\r\n" + 
 	    			"	}\r\n" + 
-	    			"	} " + 
+	    			"	}" + 
 	    			"	// When the user scrolls down 20px from the top of the document, show the button\r\n" + 
 	    			"window.onscroll = function() {scrollFunction()};\r\n" + 
 	    			"var mybutton ;\r\n" + 
