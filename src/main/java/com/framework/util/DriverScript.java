@@ -1,5 +1,6 @@
 package com.framework.util;
 
 public class DriverScript {
-int ab =10;
+int ab =100;
+
 }
