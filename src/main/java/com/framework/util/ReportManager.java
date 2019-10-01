@@ -8,26 +8,30 @@ public class ReportManager extends TestManager{
 		String timestamp = SuiteUtil.getCurrentDateTime();
 		String screenshotpath = "";
 		switch (status) {
-				case PASS:
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "PASS", "NA");
-					break;
-				case FAIL:
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "FAIL", "NA");
-					break;
 				case SKIP:
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "SKIP", "NA");
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "SKIP", "None");
 					break;
+
 				case DONE:
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "DONE", "NA");
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "DONE", "None");
 					break;
+				
+				case PASS:
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "PASS", "None");
+					break;
+				
 				case PASS_SCREENSHOT:
 					screenshotpath = takeScreenshot();
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "PASSED", screenshotpath);
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "PASS", screenshotpath);
 					break;
-					
+				
+				case FAIL:
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "FAIL", "None");
+					break;
+				
 				case FAIL_SCREENSHOT:
 					screenshotpath = takeScreenshot();
-					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "PASSED", screenshotpath);
+					html.appendTestLog("", 1, 1, _ExpectedMsg, _ActualMsg, timestamp, "FAIL", screenshotpath);
 					break;
 		}
 		

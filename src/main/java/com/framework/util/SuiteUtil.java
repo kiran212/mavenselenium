@@ -53,6 +53,17 @@ public class SuiteUtil {
 			new File(_ResultsFolderPath).mkdirs();
 		}
 		resultsPath= _ResultsFolderPath;
+		
+		String screenshotsFolder = SuiteUtil.getCurrentResultsPath()+"/Screenshots/";
+		File dir2 = new File(screenshotsFolder);
+		if(!dir2.exists()) {
+			new File(screenshotsFolder).mkdirs();
+		}
+		String HTMLReports = SuiteUtil.getCurrentResultsPath()+"/HTML Reports/";
+		File dir3 = new File(HTMLReports);
+		if(!dir3.exists()) {
+			new File(HTMLReports).mkdirs();
+		}
 		return _ResultsFolderPath;
 	}
 

@@ -17,7 +17,7 @@ import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
 
 public class TestManager {
-	protected WebDriver driver;
+	protected static WebDriver driver;
 	protected String currentBrowser;
 	protected static Properties properties;
 	protected HTMLReportGenerator html;
@@ -64,6 +64,10 @@ public class TestManager {
 				_Description = "Sample test case description";
 				SuiteUtil.currentTestCase = currentTestCaseName;
 				SuiteUtil.currentBrowser = currentBrowser;
+				String projectName = properties.getProperty("PROJECT");
+				String scenario = "Sample Scenario";
+				String executeMode = properties.getProperty("EXECUTION_MODE");
+				createTestLogHeader(projectName, scenario, currentTestCaseName, 1, currentBrowser, _TestStartTime, executeMode);
 				driver = baseDriver.initilizeDriver(currentBrowser);
 				
 		
@@ -86,8 +90,10 @@ public class TestManager {
 			_Total = _Passed+_Failed;
 			_TestEndtTime = SuiteUtil.getCurrentDateTime();
 			_TestDuration = SuiteUtil.getTimeDifference(_TestStartTime, _TestEndtTime);
-			appendTestCaseToSummaryHtml(Scenario, currentTestCaseName, _Description, _TestDuration, currentBrowser, _Status, "");
+			String lnk = SuiteUtil.getCurrentResultsPath()+"/HTML Reports/"+currentTestCaseName+"_"+currentBrowser+"_iteration1.html";
+			appendTestCaseToSummaryHtml(Scenario, currentTestCaseName, _Description, _TestDuration, currentBrowser, _Status, lnk);
 			_ExelUtil.updateTestStatusInTestManager(currentTestCaseName, _Status);
+			createTestLogFooter(_TestDuration, 10, 12);
 	}
 	
 	
@@ -130,7 +136,7 @@ public class TestManager {
 	}
 
 	public String takeScreenshot() {
-		screenshotPath = SuiteUtil.getCurrentResultsPath()+"/Screenshots/"+currentTestCaseName+"_"+currentBrowser+System.currentTimeMillis();
+		screenshotPath = SuiteUtil.getCurrentResultsPath()+"Screenshots/"+SuiteUtil.currentTestCase+"_"+SuiteUtil.currentBrowser+System.currentTimeMillis();
 		File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(srcFile, new File(screenshotPath));
@@ -138,5 +144,16 @@ public class TestManager {
 			e.printStackTrace();
 		}
 		return screenshotPath;
+	}
+	
+	private void createTestLogHeader(String projectName, String scenario, String testcase,
+			int iteration, String browser, String dateAndTime, String executeMode){
+		HTMLReportGenerator html = new HTMLReportGenerator();
+		html.createTestLogHeader(projectName, scenario, testcase, iteration, browser, dateAndTime, executeMode);
+	}
+	
+	private void createTestLogFooter(String totalDurtion, int stepsPassed, int stepsFailed){
+		HTMLReportGenerator html = new HTMLReportGenerator();
+		html.createTestLogFooter(totalDurtion, stepsPassed, stepsFailed);
 	}
 }

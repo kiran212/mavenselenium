@@ -537,6 +537,7 @@ public class HTMLReportGenerator {
 		String browser = SuiteUtil.currentBrowser;
 		int iteration = 1;
 		String filePath = SuiteUtil.getCurrentResultsPath()+"/HTML Reports/"+testcase+"_"+browser+"_iteration"+iteration+".html";
+		new File(SuiteUtil.getCurrentResultsPath()+"/HTML Reports/").mkdirs();
 		writeToFile(content, filePath);
 		return filePath;
 		
