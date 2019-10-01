@@ -9,6 +9,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
 
 public class TestManager {
 	protected WebDriver driver;
@@ -46,12 +47,9 @@ public class TestManager {
 	
 	@BeforeMethod(alwaysRun = true)
 	public void setUpTest(ITestResult result) {
-		currentTestCaseName = this.getClass().getSimpleName();
 		 _ExelUtil = new ExcelManager();
-		String runMode = _ExelUtil.getRunMode(currentTestCaseName);
-		
-		if(runMode.equals("Yes")) {
-		
+		//String runMode = _ExelUtil.getRunMode(currentTestCaseName);
+		//if(runMode.equals("Yes")) {
 				BaseDriver baseDriver = new BaseDriver();
 				currentBrowser = properties.getProperty("BROWSER_TYPE");
 				_TestStartTime = SuiteUtil.getCurrentDateTime();
@@ -60,16 +58,13 @@ public class TestManager {
 				_Description = "Sample test case description";
 				driver = baseDriver.initilizeDriver(currentBrowser);
 				
-		}
-		else {
-			throw new SkipException("Test Case: "+currentTestCaseName+" Run Mode is not enabled");
-		}
+		
 	}
 	
 	@AfterMethod(alwaysRun = true)
 	public void wrapUp(ITestResult result) {
 		if(result.getStatus() != ITestResult.SKIP) {
-			properties = SuiteUtil.initilizeProperties();
+//			properties = SuiteUtil.initilizeProperties();
 			String broserClose = properties.getProperty("BROWSER_CLOSE");
 			if(broserClose.equalsIgnoreCase("True") && driver!=null) {
 				driver.close();
@@ -96,6 +91,20 @@ public class TestManager {
 			_SuiteDuration = SuiteUtil.getTimeDifference(_SuiteStartTime, _SuiteEndTime);
 			createSummaryHtmlFooter(_SuiteDuration, _Total, _Passed, _Failed);
 			SuiteUtil.launchResults();
+	}
+	
+	
+	@DataProvider
+	public Object[][] testDataProvider() {
+		 _ExelUtil = new ExcelManager();
+		 currentTestCaseName = this.getClass().getSimpleName();
+			String runMode = _ExelUtil.getRunMode(currentTestCaseName);
+			if(!runMode.equals("Yes")) {
+					throw new SkipException("Test Case: "+currentTestCaseName+" Run Mode is not enabled");
+			}
+			Object[][] dataProvider = new Object[1][1];
+			dataProvider[0][0] =1;
+			return dataProvider;
 	}
 	
 	public void createSummaryHtmlHeader(String projectName, String _Environment, String _SuiteType, String _OS, String _DateAndTime) {

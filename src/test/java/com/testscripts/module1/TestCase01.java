@@ -7,8 +7,8 @@ import com.framework.util.TestManager;
 public class TestCase01 extends TestManager{
 	
 	
-	@Test
-	public void testCase1() {
+	@Test(dataProvider = "testDataProvider")
+	public void testCase1(int runCount) {
 		driver.manage().window().maximize();
 	}
 
