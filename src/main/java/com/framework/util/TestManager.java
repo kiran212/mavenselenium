@@ -1,7 +1,12 @@
 package com.framework.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.SkipException;
@@ -30,6 +35,8 @@ public class TestManager {
 	private String _TestEndtTime;
 	private String _TestDuration;
 	private String _Status;
+	protected ReportManager report;
+	protected String screenshotPath;
 	
 	@BeforeSuite(alwaysRun = true)
 	public void setUpSuite() {
@@ -48,14 +55,15 @@ public class TestManager {
 	@BeforeMethod(alwaysRun = true)
 	public void setUpTest(ITestResult result) {
 		 _ExelUtil = new ExcelManager();
-		//String runMode = _ExelUtil.getRunMode(currentTestCaseName);
-		//if(runMode.equals("Yes")) {
+		 report = new ReportManager();
 				BaseDriver baseDriver = new BaseDriver();
 				currentBrowser = properties.getProperty("BROWSER_TYPE");
 				_TestStartTime = SuiteUtil.getCurrentDateTime();
-				currentTestCaseName = this.getClass().getSimpleName();
+//				currentTestCaseName = this.getClass().getSimpleName();
 				Scenario = "Sample Scenario";
 				_Description = "Sample test case description";
+				SuiteUtil.currentTestCase = currentTestCaseName;
+				SuiteUtil.currentBrowser = currentBrowser;
 				driver = baseDriver.initilizeDriver(currentBrowser);
 				
 		
@@ -121,4 +129,14 @@ public class TestManager {
 		html.createSummaryHtmlFooter(_SuiteDuration, _Total, _Passed, _Failed);
 	}
 
+	public String takeScreenshot() {
+		screenshotPath = SuiteUtil.getCurrentResultsPath()+"/Screenshots/"+currentTestCaseName+"_"+currentBrowser+System.currentTimeMillis();
+		File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		try {
+			FileUtils.copyFile(srcFile, new File(screenshotPath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return screenshotPath;
+	}
 }

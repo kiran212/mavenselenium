@@ -19,6 +19,8 @@ import org.joda.time.Seconds;
 
 public class SuiteUtil {
 	private static String resultsPath;
+	public static String currentTestCase;
+	public static String currentBrowser;
 	
 	public static Properties initilizeProperties() {
 		FileInputStream fis = null;
@@ -97,4 +99,12 @@ public class SuiteUtil {
 		}
 		
 	}
+	
+//	public String getCurrentTestCase() {
+//		return currentTestCase;
+//	}
+//	
+//	public String getCurrentBrowser() {
+//		return currentBrowser;
+//	}
 }

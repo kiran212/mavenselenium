@@ -16,17 +16,17 @@ public class HTMLReportGenerator {
 		
 	}
 	
-	public static void main(String[] args) {
-	        //define a HTML String Builder
-			StringBuilder html=new StringBuilder();
-         //html = createHtmlTitle("Selenium Automation");
-       //  html = createReportHeader(html,
-			//	   "RHB - Automation Report", "SIT","Regression","Windows","1H : 20Min");
-       //  html = createReportTableHeaders(html);
-         //html = appendTestCase(html, "TC_001", "PMS Login Test 1", "Aug 27, 2019 10:35:46 AM", "Chrome", "Failed", "http://www.google.com");
-      //   createReportFooter(html,"01","01","01");
-	        System.out.println("Done");
-	    }
+//	public static void main(String[] args) {
+//	        //define a HTML String Builder
+//			StringBuilder html=new StringBuilder();
+//         //html = createHtmlTitle("Selenium Automation");
+//       //  html = createReportHeader(html,
+//			//	   "RHB - Automation Report", "SIT","Regression","Windows","1H : 20Min");
+//       //  html = createReportTableHeaders(html);
+//         //html = appendTestCase(html, "TC_001", "PMS Login Test 1", "Aug 27, 2019 10:35:46 AM", "Chrome", "Failed", "http://www.google.com");
+//      //   createReportFooter(html,"01","01","01");
+//	        System.out.println("Done");
+//	    }
 	
 	
 	private void createSummaryHtmlTitle(String titile) {
@@ -533,14 +533,10 @@ public class HTMLReportGenerator {
 	}
 	
 	private String saveTestLogHTML(StringBuilder content) {
-//		String testcase = SuiteUtil.getCurrentTestCase();
-//		String browser = SuiteUtil.getCurrentBrowser();
-//		int iteration = SuiteUtil.getCurrentIteration();
-//		String filePath = SuiteUtil.getCurrentRunPath()+"/HTML Reports/"+testcase+"_"+browser+"_iteration"+iteration+".html";
-		String testcase = "";
-		String browser = "";
-		int iteration = 0;
-		String filePath = "";
+		String testcase = SuiteUtil.currentTestCase;
+		String browser = SuiteUtil.currentBrowser;
+		int iteration = 1;
+		String filePath = SuiteUtil.getCurrentResultsPath()+"/HTML Reports/"+testcase+"_"+browser+"_iteration"+iteration+".html";
 		writeToFile(content, filePath);
 		return filePath;
 		
