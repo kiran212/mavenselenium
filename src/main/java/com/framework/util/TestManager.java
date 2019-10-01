@@ -63,8 +63,6 @@ public class TestManager {
 	
 	@AfterMethod(alwaysRun = true)
 	public void wrapUp(ITestResult result) {
-		if(result.getStatus() != ITestResult.SKIP) {
-//			properties = SuiteUtil.initilizeProperties();
 			String broserClose = properties.getProperty("BROWSER_CLOSE");
 			if(broserClose.equalsIgnoreCase("True") && driver!=null) {
 				driver.close();
@@ -81,7 +79,7 @@ public class TestManager {
 			_TestEndtTime = SuiteUtil.getCurrentDateTime();
 			_TestDuration = SuiteUtil.getTimeDifference(_TestStartTime, _TestEndtTime);
 			appendTestCaseToSummaryHtml(Scenario, currentTestCaseName, _Description, _TestDuration, currentBrowser, _Status, "");
-		}
+			_ExelUtil.updateTestStatusInTestManager(currentTestCaseName, _Status);
 	}
 	
 	
@@ -100,6 +98,7 @@ public class TestManager {
 		 currentTestCaseName = this.getClass().getSimpleName();
 			String runMode = _ExelUtil.getRunMode(currentTestCaseName);
 			if(!runMode.equals("Yes")) {
+				_ExelUtil.updateTestStatusInTestManager(currentTestCaseName, "SKIPPED");
 					throw new SkipException("Test Case: "+currentTestCaseName+" Run Mode is not enabled");
 			}
 			Object[][] dataProvider = new Object[1][1];

@@ -1,6 +1,8 @@
 package com.framework.util;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 
@@ -79,11 +81,12 @@ public class ExcelManager {
 				int lastRow = sheet.getLastRowNum();
 				String columnName="";
 				String columnData="";
+				int testcaseidColNum = getWorkSheetColumnIndex(path, sheetName).get("Test Case");
 				boolean testCaseFoundStatus = false;
 				for (int i = 0; i <= lastRow; i++) {
 					row = sheet.getRow(i);
 					if(row!=null) {
-						if(testCaseName.equals(row.getCell(1).getStringCellValue())) {
+						if(testCaseName.equals(row.getCell(testcaseidColNum).getStringCellValue())) {
 							testCaseFoundStatus = true;
 							for (int j = 0; j <= lastColumns; j++) {
 								cell = row.getCell(j);
@@ -101,6 +104,62 @@ public class ExcelManager {
 				}
 	
 	return testData;
+	}
 	
+	
+	public HSSFRow getCurrentTestRow(String path, String sheetName, String testCaseName){
+		
+		HSSFWorkbook workbook = getWorkBook(path);
+		HSSFSheet sheet = workbook.getSheet(sheetName);
+		int lastRow = sheet.getLastRowNum();
+		int testcaseidColNum = getWorkSheetColumnIndex(path, sheetName).get("Test Case");
+		for (int i = 0; i <= lastRow; i++) {
+			row = sheet.getRow(i);
+			if(row!=null) {
+				if(testCaseName.equals(row.getCell(testcaseidColNum).getStringCellValue())) {
+					return row;
+				}
+			}
+		}
+
+		return row;
+}
+
+	
+	public void updateTestStatusInTestManager(String testCaseName, String status) {
+		String path = "./TestManager.xls";
+		HSSFWorkbook workbook = getWorkBook(path);
+		String sheetname = workbook.getSheetName(0);
+		int statusColNum = getWorkSheetColumnIndex(path, sheetname).get("Status");
+		row = getCurrentTestRow(path, sheetname, testCaseName);
+		cell = row.getCell(statusColNum);
+		if(cell!=null) {
+			row.getCell(statusColNum).setCellValue(status);
+		}else {
+			row.createCell(statusColNum).setCellValue(status);
+		}
+		workbook = row.getSheet().getWorkbook();
+		saveWorkBook(path, workbook);
+		
+	}
+	
+	
+	public void saveWorkBook(String path, HSSFWorkbook workbook) {
+		FileOutputStream fos =null;
+		try {
+			fos = new FileOutputStream(path);
+			workbook.write(fos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+		try {
+			fos.close();
+			workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		}
+		
+		
 	}
 }
