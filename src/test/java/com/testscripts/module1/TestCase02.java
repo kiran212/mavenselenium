@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import com.framework.util.TestManager;
 
-public class TestCase01 extends TestManager{
+public class TestCase02 extends TestManager{
 	
 	
 	@Test

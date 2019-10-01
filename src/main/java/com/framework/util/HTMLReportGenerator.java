@@ -444,9 +444,10 @@ public class HTMLReportGenerator {
 				"        </div>\r\n" + 
 				"    </div>");
 		saveSummaryHTML(html);
+		createSummaryHtmlTableHeaders();
 	}
 	
-	public void createSummaryHtmlTableHeaders() {
+	private void createSummaryHtmlTableHeaders() {
 		StringBuilder html = new StringBuilder();
 		html.append("<div class='container-headerTable'>\r\n" + 
 				"    <div class='wrap-headerTable'>\r\n" + 
@@ -456,7 +457,7 @@ public class HTMLReportGenerator {
 				"                    <tr class='headerTable_tr'>\r\n" + 
 				"                        <th class='th_scenario'>Test Scenario</th>\r\n" + 
 				"                        <th class='th_TCID'>Test Case</th>\r\n" + 
-				"                        <th class='th_iteration'>Iteration</th>\r\n" + 
+				"                        <th class='th_iteration'>Run(s)</th>\r\n" + 
 				"                        <th class='th_desc'>Test Case Description</th>\r\n" + 
 				"                        <th class='th_timespan'>Time Span</th>\r\n" + 
 				"                        <th class='th_browser'>Browser</th>\r\n" + 
@@ -468,8 +469,10 @@ public class HTMLReportGenerator {
 		
 	}
 	
-	public void appendTestCaseToSummaryHtml(String Scenario,  String _TCID,int _Iteration,
-			String _Description, String _StartTime, String _Browser, String _Status, String link) {
+//	public void appendTestCaseToSummaryHtml(String Scenario,  String _TCID,int _Iteration,
+//			String _Description, String _StartTime, String _Browser, String _Status, String link) {
+		public void appendTestCaseToSummaryHtml(String Scenario,  String _TCID,
+				String _Description, String _StartTime, String _Browser, String _Status, String link) {
 		String status = "";
 		if(_Status.equalsIgnoreCase("Failed")) {
 			status = "td_fstatus";
@@ -480,7 +483,8 @@ public class HTMLReportGenerator {
 		html.append("				 <tr class='tr_content'>\r\n" + 
 				"                        <td class='td_scenario'>"+Scenario+"</td>\r\n" + 
 				"                        <td class='td_TCID'>"+_TCID+"</td>\r\n" + 
-				"                        <td class='td_iteration'><a target='blank' href='"+link+"' >Iteration"+_Iteration+"</a></td>\r\n" + 
+//				"                        <td class='td_iteration'><a target='blank' href='"+link+"' >Iteration"+_Iteration+"</a></td>\r\n" + 
+				"                        <td class='td_iteration'><a target='blank' href='"+link+"' >Run 1</a></td>\r\n" + 
 				"                        <td class='td_desc'>"+_Description+"</td>\r\n" + 
 				"                        <td class='td_timespan'><small>"+_StartTime+"</small></td>\r\n" + 
 				"                        <td class='td_browser'>"+_Browser+"</td>\r\n" + 
@@ -489,7 +493,8 @@ public class HTMLReportGenerator {
 		saveSummaryHTML(html);
 	}
 	
-	public  void createSummaryHtmlFooter(String duration, int _Total, int _skipped, int _Passed, int _Failed) {
+//	public  void createSummaryHtmlFooter(String duration, int _Total, int _skipped, int _Passed, int _Failed) {
+		public  void createSummaryHtmlFooter(String duration, int _Total, int _Passed, int _Failed) {
 		StringBuilder html = new StringBuilder();
 		html.append("				</tbody>\r\n" + 
 				"               </table>\r\n" + 
@@ -506,7 +511,8 @@ public class HTMLReportGenerator {
 				"					</tr>\r\n" + 
 				"					<tr class='footer_tr'>\r\n" + 
 				"					  <td class='footer_total'>Total : "+_Total+"</th>\r\n" + 
-				"					  <td class='footer_skip'>Skipped : "+_skipped+"</th>\r\n" + 
+//				"					  <td class='footer_skip'>Skipped : "+_skipped+"</th>\r\n" + 
+				"					  <td class='footer_skip'></th>\r\n" + 
 				"					  <td class='footer_pass'>Passed : "+_Passed+"</th>\r\n" + 
 				"					  <td class='footer_fail'>Failed : "+_Failed+"</th>\r\n" + 
 				"                     </tr>\r\n" + 
@@ -521,8 +527,7 @@ public class HTMLReportGenerator {
 	}
 	
 	private void saveSummaryHTML(StringBuilder content) {
-//		String filePath = SuiteUtil.getCurrentRunPath()+"/Summary Report.html";
-		String filePath = "/Summary Report.html";
+		String filePath = SuiteUtil.getCurrentResultsPath()+"Summary Report.html";
 		writeToFile(content, filePath);
 		
 	}
@@ -650,7 +655,7 @@ public class HTMLReportGenerator {
 	    			+ "				<tr>\r\n" + 
 //	    			"					<td></td>"+			
 	    			"					<td class='keywordlnk' name = 'keywordlink' colspan='2' onclick='toggleMenu(\""+keyword+iteration+"\")' > -- Keyword: "+keyword+" </td>\r\n" +
-	    			"					<td class='keywordlnk'></td>"+
+	    			"					<td class='keywordlnk'colspan='4'></td>"+
 	    			"				</tr>");
 	    	saveTestLogHTML(content);
 	    	System.out.println();
