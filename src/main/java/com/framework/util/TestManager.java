@@ -37,7 +37,9 @@ public class TestManager {
 	private String _Status;
 	protected ReportManager report;
 	protected String screenshotPath;
-	
+	protected static int stepnum=0;
+	protected static int _PassStepNum=0;
+	protected static int _FailStepNum=0;
 	@BeforeSuite(alwaysRun = true)
 	public void setUpSuite() {
 		 properties = SuiteUtil.initilizeProperties(); 
@@ -54,6 +56,7 @@ public class TestManager {
 	
 	@BeforeMethod(alwaysRun = true)
 	public void setUpTest(ITestResult result) {
+		stepnum=0;
 		 _ExelUtil = new ExcelManager();
 		 report = new ReportManager();
 				BaseDriver baseDriver = new BaseDriver();
@@ -93,7 +96,8 @@ public class TestManager {
 			String lnk = SuiteUtil.getCurrentResultsPath()+"/HTML Reports/"+currentTestCaseName+"_"+currentBrowser+"_iteration1.html";
 			appendTestCaseToSummaryHtml(Scenario, currentTestCaseName, _Description, _TestDuration, currentBrowser, _Status, lnk);
 			_ExelUtil.updateTestStatusInTestManager(currentTestCaseName, _Status);
-			createTestLogFooter(_TestDuration, 10, 12);
+			createTestLogFooter(_TestDuration, _PassStepNum, _FailStepNum);
+			
 	}
 	
 	

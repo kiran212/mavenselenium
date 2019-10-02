@@ -1,7 +1,6 @@
 package com.framework.util;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -16,7 +15,45 @@ public class ExcelManager {
 	HSSFRow row;
 	HSSFCell cell;
 	
-	public String getRunMode(String _TestCaseName) {
+	
+	public Hashtable<String, String> getData(String sheetName){
+		Hashtable<String, String> testData = new Hashtable<String, String>();
+		String testCaseName = SuiteUtil.currentTestCase;
+		String path = "./TestManager1.xls";
+		testData =  getCurrentTestData(path, sheetName, testCaseName);
+		if(testData==null){
+			path = "./src/test/resources/TestData/Module1.xls";
+			testData =  getCurrentTestData(path, sheetName, testCaseName);
+		}
+		return testData;
+	}
+	public String getData(String sheetName, String columnName){
+		Hashtable<String, String> testdata = getData(sheetName);
+		return testdata.get(columnName);
+	}
+	
+	public void putData(String sheetName, String columnName, String data){
+			String path = "./TestManager.xls";
+			String testCaseName = SuiteUtil.currentTestCase;
+			row = getCurrentTestRow(path, sheetName, testCaseName);
+			if(row==null){
+				path = "./src/test/resources/TestData/Module1.xls";
+				row = getCurrentTestRow(path, sheetName, testCaseName);
+			}
+			int columnNum = getWorkSheetColumnIndex(path, sheetName).get(columnName);
+			cell = row.getCell(columnNum);
+			if(cell!=null) {
+				row.getCell(columnNum).setCellValue(data);
+			}else {
+				row.createCell(columnNum).setCellValue(data);
+			}
+			HSSFWorkbook workbook = row.getSheet().getWorkbook();
+			saveWorkBook(path, workbook);
+		
+	}
+	
+	
+	 String getRunMode(String _TestCaseName) {
 		String _RunMode = new String();
 		String path = "./TestManager.xls";
 		_RunMode = getCurrentTestData(path, 0, _TestCaseName).get("Run");
@@ -73,9 +110,12 @@ public class ExcelManager {
 	
 	
 
-	public Hashtable<String, String> getCurrentTestData(String path, String sheetName, String testCaseName){
+	private Hashtable<String, String> getCurrentTestData(String path, String sheetName, String testCaseName){
 				Hashtable<String, String> testData = new Hashtable<String, String>();
 				HSSFWorkbook workbook = getWorkBook(path);
+				if(workbook==null){
+					return null;
+				}
 				HSSFSheet sheet = workbook.getSheet(sheetName);
 				int lastColumns = sheet.getRow(0).getLastCellNum();
 				int lastRow = sheet.getLastRowNum();
@@ -107,10 +147,13 @@ public class ExcelManager {
 	}
 	
 	
-	public HSSFRow getCurrentTestRow(String path, String sheetName, String testCaseName){
+	private HSSFRow getCurrentTestRow(String path, String sheetName, String testCaseName){
 		
 		HSSFWorkbook workbook = getWorkBook(path);
 		HSSFSheet sheet = workbook.getSheet(sheetName);
+		if(sheet==null){
+			return null;
+		}
 		int lastRow = sheet.getLastRowNum();
 		int testcaseidColNum = getWorkSheetColumnIndex(path, sheetName).get("Test Case");
 		for (int i = 0; i <= lastRow; i++) {
@@ -126,7 +169,7 @@ public class ExcelManager {
 }
 
 	
-	public void updateTestStatusInTestManager(String testCaseName, String status) {
+	void updateTestStatusInTestManager(String testCaseName, String status) {
 		String path = "./TestManager.xls";
 		HSSFWorkbook workbook = getWorkBook(path);
 		String sheetname = workbook.getSheetName(0);
@@ -144,7 +187,7 @@ public class ExcelManager {
 	}
 	
 	
-	public void saveWorkBook(String path, HSSFWorkbook workbook) {
+	private void saveWorkBook(String path, HSSFWorkbook workbook) {
 		FileOutputStream fos =null;
 		try {
 			fos = new FileOutputStream(path);
@@ -162,4 +205,5 @@ public class ExcelManager {
 		
 		
 	}
+	
 }
